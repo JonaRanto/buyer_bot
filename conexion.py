@@ -16,7 +16,6 @@ __status__ = 'developer'
 
 # Variables
 chromedriver_file = os.getcwd() + '\\chromedriver.exe'
-extension_buster = os.getcwd() + '\\Buster_-Captcha-Solver-for-Humans_v1.2.2.crx'
 
 # Módulos
 
@@ -36,7 +35,6 @@ def conectar_wd():
     config_chrome.add_argument('--disable-notifications')
     config_chrome.add_experimental_option(
         'excludeSwitches', ['enable-logging'])
-    config_chrome.add_extension(extension_buster)
     try:
         # Ejecuta el controlador de chrome ubicado en la raiz y le pasa las opciones configuradas
         wd = wd.Chrome(executable_path=chromedriver_file,

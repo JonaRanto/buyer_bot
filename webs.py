@@ -14,12 +14,12 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from configparser import ConfigParser
 import os
 import random
 import time
+import sys
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
@@ -42,8 +42,7 @@ comprador = Comprador(
     config.get('comprador', 'rut'),
     config.get('tarjeta', 'nombre_completo'),
     config.get('tarjeta', 'numero_tarjeta'),
-    config.get('tarjeta', 'fecha_expiracion')
-)
+    config.get('tarjeta', 'fecha_expiracion'))
 
 # Módulos
 
@@ -59,16 +58,16 @@ def moredrops(producto: Producto, wd: WebDriver):
 
         # Verificar si es está en una cola de queue-it.net
         while True:
+            print(validar_web(str(wd.current_url))[1])
             if validar_web(str(wd.current_url))[1] == 'yaneken':
                 limpiar_consola(producto)
                 mensaje(1, 'Esperando en cola...')
                 # Buscar captcha
-                mensaje(1, 'Buscando captcha')
-                try:
-                    wd.find_element_by_id('divChallenge')
+                mensaje(1, 'Buscando captcha...')
+                if len(wd.find_elements_by_id('divChallenge')) != 0:
                     saltar_bypass(wd)
-                except NoSuchElementException:
-                    mensaje(1, 'Captcha no encontrado!')
+                else:
+                    mensaje(1, 'Captcha no encontrado.')
                 time.sleep(3)
             else:
                 break

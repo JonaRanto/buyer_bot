@@ -15,7 +15,7 @@ if producto.programado:
     programar_compra(producto)
 
 # Elegir web
-if producto.nombre_web == 'moredrops' or producto.nombre_web == 'yaneken':
+if producto.nombre_web == 'moredrops':
     # Conexion WebDriver
     wd = conectar_wd()
     webs.moredrops(producto, wd)
