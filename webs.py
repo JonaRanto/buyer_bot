@@ -58,7 +58,6 @@ def moredrops(producto: Producto, wd: WebDriver):
 
         # Verificar si es está en una cola de queue-it.net
         while True:
-            print(validar_web(str(wd.current_url))[1])
             if validar_web(str(wd.current_url))[1] == 'yaneken':
                 limpiar_consola(producto)
                 mensaje(1, 'Esperando en cola...')
