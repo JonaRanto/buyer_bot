@@ -15,7 +15,11 @@ if producto.programado:
     programar_compra(producto)
 
 # Elegir web
-if producto.nombre_web == 'moredrops':
+if producto.nombre_web == 'bold':
+    # Conexion WebDriver
+    wd = conectar_wd()
+    webs.bold(producto, wd)
+elif producto.nombre_web == 'moredrops':
     # Conexion WebDriver
     wd = conectar_wd()
     webs.moredrops(producto, wd)

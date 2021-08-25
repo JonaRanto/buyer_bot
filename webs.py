@@ -46,6 +46,153 @@ comprador = Comprador(
 
 # Módulos
 
+def bold(producto: Producto, wd: WebDriver):
+    '''
+    Se ejecutan las instrucciones para la web de bold.
+    '''
+    while True:
+        # Ingresar a la URL y limpia la consola
+        wd.get(producto.url)
+        limpiar_consola(producto)
+
+        # Verificar si es está en una cola de queue-it.net
+        while True:
+            if validar_web(str(wd.current_url))[1] == 'yaneken':
+                limpiar_consola(producto)
+                mensaje(1, 'Esperando en cola...')
+                # Buscar captcha
+                mensaje(1, 'Buscando captcha...')
+                if len(wd.find_elements_by_id('divChallenge')) != 0:
+                    saltar_bypass(wd)
+                else:
+                    mensaje(1, 'Captcha no encontrado.')
+                time.sleep(3)
+            else:
+                break
+
+        # Inicia sesion si no está ya iniciada
+        try:
+            mensaje(1, 'Verificando inicio de sesión...')
+            # Obtiene la grilla de sesion
+            grilla_sesion = wd.find_element_by_class_name('nav__links--shop_info')
+            lista_opciones_sesion = grilla_sesion.find_elements_by_tag_name('li')
+            # Verifica si la sesión está iniciada
+            if len(lista_opciones_sesion) > 2:
+                mensaje(1, 'La sesión ya está iniciada.')
+            else:
+                mensaje(1, 'Sesión no iniciada. Iniciando sesión...')
+                wd.get('https://bold.cl/login')
+                user_email = wd.find_element_by_id('j_username')
+                user_email.send_keys(comprador.email)
+                user_pass = wd.find_element_by_id('j_password')
+                user_pass.send_keys(comprador.pwd)
+                boton_login = wd.find_element_by_xpath('//button[@data-test-login="login_button"]')
+                boton_login.click()
+                mensaje(1, 'Se ha iniciado la sesión.')
+                wd.get(producto.url)
+        except Exception as e:
+            error(e)
+            
+        # Realizar la compra
+        try:
+            mensaje(1, 'Buscando talla...')
+            # Obtiene la grilla de tallas
+            grilla_tallas = wd.find_element_by_class_name('sizes-pdp-options')
+            lista_tallas = grilla_tallas.find_elements_by_tag_name('a')
+            tallas_disponibles = []
+            # Recorre la grilla buscando las tallas aún disponibles
+            for index in range(len(lista_tallas)):
+                if not 'disabled' in lista_tallas[index].get_attribute('class'):
+                    tallas_disponibles.append(lista_tallas[index])
+            # Si encuentran tallas disponibles, se selecciona una al azar
+            if len(tallas_disponibles) <= 0:
+                error('No se ha encontrado ninguna talla disponible.')
+            else:
+                talla_seleccionada = random.choice(tallas_disponibles)
+                mensaje(1, 'Se ha seleccionado la talla ' + str(talla_seleccionada.text + '.'))
+                talla_seleccionada.click()
+                # Intentar añadir al carrito
+                try:
+                    mensaje(1, 'Añadiendo al carrito...')
+                    formulario_agregar_carro = wd.find_element_by_id('addToCartForm')
+                    if formulario_agregar_carro.text == 'FUERA DE STOCK':
+                        error('La talla está sin stock.')
+                    else:
+                        boton_agregar_carro = wd.find_element_by_id('addToCartButton')
+                        boton_agregar_carro.click()
+                        time.sleep(1.5)
+                        producto_agregado = wd.find_element_by_xpath('//*[@id="addToCartLayer"]/div[2]/div[2]/div[1]')
+                        # Verifica que el producto se haya añadido correctamente
+                        if producto_agregado.text.split()[-1] == '0':
+                            error('El producto no se añadió correctamente al carrito.')
+                        else:
+                            mensaje(1, 'El producto se ha añadido al carrito correctamente!')
+                            ir_carrito = wd.find_element_by_xpath('//*[@id="addToCartLayer"]/a[1]')
+                            ir_carrito.click()
+                            mensaje(1, 'Verificando carrito...')
+                            # Verificar carrito de compras
+                            while True:
+                                cantidad_carrito = wd.find_elements_by_xpath('//li[@class="item__list--item"]')
+                                cantidad_carrito_flag = len(cantidad_carrito)
+                                # Verificar si hay mas de un producto en el carrito y elimina todos menos el ultimo agregado
+                                if len(cantidad_carrito) > 1:
+                                    mensaje(1, 'Eliminando producto más antiguo...')
+                                    eliminar_producto = wd.find_element_by_id('actionEntry_0')
+                                    eliminar_producto.click()
+                                    # Esperar a que cambie la cantidad en el carrito
+                                    while True:
+                                        cantidad_carrito = wd.find_elements_by_xpath('//li[@class="item__list--item"]')
+                                        time.sleep(0.5)
+                                        if cantidad_carrito_flag != len(cantidad_carrito):
+                                            break
+                                else:
+                                    grilla_sesion = wd.find_element_by_class_name('nav__links--shop_info')
+                                    lista_opciones_sesion = grilla_sesion.find_elements_by_tag_name('li')
+                                    contador_carro = lista_opciones_sesion[5]
+                                    # Verificar si hay mas de un producto en el carrito y elimina todos menos el ultimo agregado
+                                    if int(contador_carro.text) > 1:
+                                        WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//button[@data-auto-id="label"]')))
+                                        cantidad_mismo_producto = wd.find_element_by_id('quantity_0')
+                                        cantidad_mismo_producto.clear()
+                                        cantidad_mismo_producto.send_keys('1' + Keys.RETURN)
+                                        # Esperar a que el contador del carro se actualice 
+                                        while True:
+                                            contador_carro = wd.find_element_by_xpath('//span[@data-auto-id="cart-count"]')
+                                            time.sleep(0.5)
+                                            if int(contador_carro.text) == 1:
+                                                break
+                                    mensaje(1, 'Carrito verificado correctamente!')
+                                    break
+                            mensaje(1, 'Rellenando datos de compra...')
+                            # Intentar finalizar la compra
+                            try:
+                                boton_finalizar_compra = wd.find_element_by_xpath('//div[@class="cart__actions"]/div/div[1]/button')
+                                boton_finalizar_compra.click()
+                                boton_libreta_direcciones = wd.find_element_by_class_name('js-address-book')
+                                boton_libreta_direcciones.click()
+                                boton_usar_direccion = wd.find_element_by_xpath('//*[@id="addressbook"]/div/form/button')
+                                boton_usar_direccion.click()
+                                boton_medio_pago = wd.find_element_by_id('deliveryMethodSubmit')
+                                boton_medio_pago.click()
+                                seleccionar_tarjeta_credito = wd.find_element_by_id('paymentModeCredit')
+                                seleccionar_tarjeta_credito.click()
+                                boton_datos_tarjeta = wd.find_element_by_id('paymentModeSubmit')
+                                boton_datos_tarjeta.click()
+                                nombre_comprador = wd.find_element_by_id('cardholderName')
+                                nombre_comprador.send_keys(comprador.nombre_completo)
+                                numero_tarjeta = wd.find_element_by_id('cardNumber')
+                                numero_tarjeta.send_keys(comprador.numero_tarjeta)
+                                fecha_expiracion = wd.find_element_by_id('expiracy')
+                                fecha_expiracion.send_keys(comprador.fecha_expiracion_tarjeta)
+                                mensaje(1, 'Se han llenado los datos de compra correctamente!')
+                                alerta_compra(wd)
+                                break
+                            except Exception as e:
+                                error(e)                
+                except Exception as e:
+                    error(e)
+        except Exception as e:
+            error(e)   
 
 def moredrops(producto: Producto, wd: WebDriver):
     '''
@@ -94,7 +241,7 @@ def moredrops(producto: Producto, wd: WebDriver):
         except Exception as e:
             error(e)
 
-        # Intenta realizar la compra
+        # Realizar la compra
         try:
             mensaje(1, 'Buscando talla...')
             # Obtiene la grilla de tallas
@@ -130,23 +277,44 @@ def moredrops(producto: Producto, wd: WebDriver):
                             mensaje(1, 'El producto se ha añadido al carrito correctamente!')
                             ir_carrito = wd.find_element_by_xpath('//*[@id="addToCartLayer"]/a[1]')
                             ir_carrito.click()
-                            # Verificar carrito de compras
                             mensaje(1, 'Verificando carrito...')
+                            # Verificar carrito de compras
                             while True:
-                                grilla_sesion = wd.find_element_by_class_name('nav__links--shop_info')
-                                lista_opciones_sesion = grilla_sesion.find_elements_by_tag_name('li')
+                                cantidad_carrito = wd.find_elements_by_xpath('//li[@class="item__list--item"]')
+                                cantidad_carrito_flag = len(cantidad_carrito)
                                 # Verificar si hay mas de un producto en el carrito y elimina todos menos el ultimo agregado
-                                if int(lista_opciones_sesion[5].text) > 1:
+                                if len(cantidad_carrito) > 1:
                                     mensaje(1, 'Eliminando producto más antiguo...')
                                     eliminar_producto = wd.find_element_by_id('actionEntry_0')
                                     eliminar_producto.click()
+                                    # Esperar a que cambie la cantidad en el carrito
+                                    while True:
+                                        cantidad_carrito = wd.find_elements_by_xpath('//li[@class="item__list--item"]')
+                                        time.sleep(0.5)
+                                        if cantidad_carrito_flag != len(cantidad_carrito):
+                                            break
                                 else:
+                                    grilla_sesion = wd.find_element_by_class_name('nav__links--shop_info')
+                                    lista_opciones_sesion = grilla_sesion.find_elements_by_tag_name('li')
+                                    contador_carro = lista_opciones_sesion[5]
+                                    # Verificar si hay mas de un producto en el carrito y elimina todos menos el ultimo agregado
+                                    if int(contador_carro.text) > 1:
+                                        WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//button[@data-auto-id="label"]')))
+                                        cantidad_mismo_producto = wd.find_element_by_id('quantity_0')
+                                        cantidad_mismo_producto.clear()
+                                        cantidad_mismo_producto.send_keys('1' + Keys.RETURN)
+                                        # Esperar a que el contador del carro se actualice 
+                                        while True:
+                                            contador_carro = wd.find_element_by_xpath('//span[@data-auto-id="cart-count"]')
+                                            time.sleep(0.5)
+                                            if int(contador_carro.text) == 1:
+                                                break
                                     mensaje(1, 'Carrito verificado correctamente!')
                                     break
                             mensaje(1, 'Rellenando datos de compra...')
-                            # Intentar realizar la compra
+                            # Intentar finalizar la compra
                             try:
-                                boton_finalizar_compra = wd.find_element_by_class_name('btn--continue-checkout')
+                                boton_finalizar_compra = wd.find_element_by_xpath('//div[@class="cart__actions"]/div/div[1]/button')
                                 boton_finalizar_compra.click()
                                 boton_libreta_direcciones = wd.find_element_by_class_name('js-address-book')
                                 boton_libreta_direcciones.click()
@@ -222,7 +390,7 @@ def adidas(producto: Producto, wd: WebDriver):
             else:
                 break
         
-        # Intenta realizar la compra
+        # Realizar la compra
         try:
             mensaje(1, 'Buscando talla con más unidades...')
             # Obtiene la grilla de tallas
@@ -258,8 +426,8 @@ def adidas(producto: Producto, wd: WebDriver):
                 WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//a[@data-auto-id="view-bag-desktop"]')))
                 boton_ir_carrito = wd.find_element_by_xpath('//a[@data-auto-id="view-bag-desktop"]')
                 boton_ir_carrito.click()
-                # Verificar carrito de compras
                 mensaje(1, 'Verificando carrito...')
+                # Verificar carrito de compras
                 while True:
                     cantidad_carrito = wd.find_elements_by_xpath('//div[@data-auto-id="glass-cart-item-list"]/div/div/div/div/div/div/div/div[2]/div/button')
                     cantidad_carrito_flag = len(cantidad_carrito)
@@ -284,13 +452,14 @@ def adidas(producto: Producto, wd: WebDriver):
                             # Esperar a que el contador del carro se actualice
                             while True:
                                 contador_carro = wd.find_element_by_xpath('//span[@data-auto-id="cart-count"]')
+                                time.sleep(0.5)
                                 if int(contador_carro.text) == 1:
                                     break
                         mensaje(1, 'Carrito verificado correctamente!')
                         break
                 boton_ir_pagar = wd.find_element_by_xpath('//button[@data-auto-id="glass-checkout-button-bottom"]')
                 boton_ir_pagar.click()
-                # Intentar realizar la compra
+                # Intentar finalizar la compra
                 mensaje(1, 'Rellenando datos de compra...')
                 WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//div[@data-auto-id="billingAddress-fiscalDocument"]')))
                 tipo_documento = wd.find_element_by_xpath('//div[@data-auto-id="billingAddress-fiscalDocument"]')
