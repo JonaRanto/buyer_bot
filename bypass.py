@@ -100,7 +100,7 @@ def saltar_bypass(wd: WebDriver):
                     break
                     
         except Exception as e:
-            mensaje(2, e)
+            mensaje(2, str(e))
             mensaje(2, 'Posiblemente ha sido bloqueado por google')
             pass
     else:

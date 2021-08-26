@@ -498,4 +498,3 @@ def error(msg):
     mensaje(2, str(msg))
     mensaje(1, 'Recargando página...')
     time.sleep(1)
-
