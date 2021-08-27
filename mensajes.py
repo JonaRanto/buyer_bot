@@ -5,7 +5,7 @@ Módulos de mensajes.
 
 # Importaciones
 from colorama.ansi import Style
-from producto import Producto
+from datos import Producto
 import colorama
 import os
 

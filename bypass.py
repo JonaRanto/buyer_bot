@@ -15,7 +15,6 @@ import time
 import os
 import urllib.request
 
-
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
 __version__ = '1.0.0'
@@ -28,13 +27,15 @@ audioFile = "\\payload.mp3"
 
 # Módulos
 
+
 def saltar_bypass(wd: WebDriver):
     '''
     Verifica si en la página actual hay un captcha de google y lo resuelve.
     '''
     mensaje(1, 'Reconociendo ReCaptcha...')
     # Busca el elemento que contiene el iframe del captcha
-    g_recaptcha = wd.find_element_by_xpath('//div[@id="challenge-container"]/div/div')
+    g_recaptcha = wd.find_element_by_xpath(
+        '//div[@id="challenge-container"]/div/div')
     # Dentro del elemento de g_recaptcha busca el elemento con el tag iframe y le hace click
     outerIframe = g_recaptcha.find_element_by_tag_name('iframe')
     outerIframe.click()
@@ -42,7 +43,7 @@ def saltar_bypass(wd: WebDriver):
     mensaje(1, 'Resolviendo ReCaptcha...')
     # Guarda una lista de elementos con la clase iframe
     iframes = wd.find_elements_by_tag_name('iframe')
-    
+
     audioBtnFound = False
     audioBtnIndex = -1
 
@@ -54,7 +55,8 @@ def saltar_bypass(wd: WebDriver):
         # Se ubica en el frame (Los frames son marcos incrustados por otras páginas)
         wd.switch_to.frame(iframe)
         try:
-            WebDriverWait(wd, 2).until(ec.presence_of_element_located((By.ID, 'recaptcha-audio-button')))
+            WebDriverWait(wd, 2).until(ec.presence_of_element_located(
+                (By.ID, 'recaptcha-audio-button')))
             audioBtn = wd.find_element_by_id("recaptcha-audio-button")
             audioBtn.click()
             audioBtnFound = True
@@ -62,14 +64,16 @@ def saltar_bypass(wd: WebDriver):
             break
         except Exception:
             pass
-    
+
     if audioBtnFound:
         try:
             while True:
                 mensaje(1, 'Obteniendo Url del audio...')
                 # Obtiene la url del audio
-                WebDriverWait(wd, 2).until(ec.presence_of_element_located((By.ID, 'audio-source')))
-                src = wd.find_element_by_id("audio-source").get_attribute("src")
+                WebDriverWait(wd, 2).until(
+                    ec.presence_of_element_located((By.ID, 'audio-source')))
+                src = wd.find_element_by_id(
+                    "audio-source").get_attribute("src")
                 mensaje(1, 'Audio src: %s' % src)
 
                 # Descarga el audio (payload.mp3)
@@ -93,12 +97,13 @@ def saltar_bypass(wd: WebDriver):
                 # Si no hay error avanza
                 time.sleep(5)
                 try:
-                    help_button = wd.find_element_by_id('recaptcha-help-button')
+                    help_button = wd.find_element_by_id(
+                        'recaptcha-help-button')
                     help_button.click()
                 except ElementClickInterceptedException:
                     mensaje(1, 'Se ha resuelto el captcha!')
                     break
-                    
+
         except Exception as e:
             mensaje(2, str(e))
             mensaje(2, 'Posiblemente ha sido bloqueado por google')

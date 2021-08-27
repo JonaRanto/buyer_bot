@@ -5,7 +5,7 @@ Módulos de programacion.
 
 # Importaciones
 from mensajes import limpiar_consola, mensaje
-from producto import Producto
+from datos import Producto
 import datetime as dt
 import time
 

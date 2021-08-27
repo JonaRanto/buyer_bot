@@ -18,8 +18,9 @@ __status__ = 'developer'
 # Variables
 repeticiones_alarma = 3
 
-
 # Módulos
+
+
 def alerta_compra(wd: WebDriver):
     '''
     Recibe un WebDriver y lanza una alerta que reproduce un sonido, envia un mensaje por consola y maximiza la ventana.

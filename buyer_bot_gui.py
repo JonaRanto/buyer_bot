@@ -4,7 +4,7 @@ Módulos de interfaz gráfica.
 '''
 
 # Importaciones
-from producto import Producto
+from datos import Producto, Comprador
 from tkinter import *
 from tkinter import messagebox
 from validaciones import validar_formato_hora, validar_web
@@ -17,12 +17,17 @@ __version__ = '1.0.0'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
+# Variables
+cantidad_compradores = Comprador().contar_compradores()
+compradores = []
+global comprador_flag
+
 # Módulos
 
 
 def gui():
     '''
-    Muestra la interfaz gráfica del buyer_bot y devuelve un objeto de tipo Producto.
+    Muestra la interfaz gráfica del buyer_bot y devuelve una lista con un objeto de tipo Producto y el numero del comprador.
     '''
     root = Tk()
 
@@ -35,6 +40,7 @@ def gui():
     compra_programada = BooleanVar()
     fecha_actual = dt.datetime.now()
     hora_evento = StringVar()
+    comprador = StringVar()
 
     root.title('Interfaz gráfica buyer_bot')
     root.resizable(False, False)
@@ -53,18 +59,27 @@ def gui():
     input_url_producto = Entry(frame, width=40, textvariable=url_producto)
     input_url_producto.grid(row=1, column=1, padx=10)
 
+    for i in range(cantidad_compradores):
+        compradores.append(Comprador(i + 1).email)
+
+    label_comprador = Label(frame, text='Comprador: ')
+    label_comprador.grid(row=2, column=0, sticky=E, pady=5, padx=10)
+    drop_comprador = OptionMenu(frame, comprador, *compradores)
+    drop_comprador.grid(row=2, column=1, sticky=W, padx=10)
+    comprador.set(compradores[0])
+
     def programar_compra():
         '''
         Activa y desactiva las opciones de compra programada.
         '''
         if compra_programada.get():
             label_programar_fecha.grid(
-                row=3, column=0, sticky=E, pady=5, padx=10)
-            input_programar_fecha.grid(row=3, column=1, padx=10)
+                row=4, column=0, sticky=E, pady=5, padx=10)
+            input_programar_fecha.grid(row=4, column=1, padx=10)
             input_programar_fecha['mindate'] = fecha_actual
             label_programar_hora.grid(
-                row=4, column=0, sticky=E, pady=5, padx=10)
-            input_programar_hora.grid(row=4, column=1, sticky=W, padx=10)
+                row=5, column=0, sticky=E, pady=5, padx=10)
+            input_programar_hora.grid(row=5, column=1, sticky=W, padx=10)
         else:
             label_programar_fecha.grid_forget()
             input_programar_fecha.grid_forget()
@@ -73,7 +88,7 @@ def gui():
 
     chk_box_compra_programada = Checkbutton(
         frame, text='Programar', variable=compra_programada, command=programar_compra)
-    chk_box_compra_programada.grid(row=2, column=1, sticky=W, padx=10)
+    chk_box_compra_programada.grid(row=3, column=1, sticky=W, padx=10)
 
     label_programar_fecha = Label(
         frame, text='Fecha programada: ')
@@ -87,6 +102,9 @@ def gui():
     input_programar_hora.grid_forget()
 
     def start():
+        '''
+        Valida url y hora y en caso de pasar la validación, finaliza la interfaz gráfica.
+        '''
         validacion_web = validar_web(url_producto.get())
         validado = False
         if not validacion_web[0]:
@@ -106,11 +124,16 @@ def gui():
             producto.fecha_programada = input_programar_fecha.get_date()
             producto.hora_programada = hora_evento.get()
             producto.descripcion = descripcion_producto.get()
+            for i in range(cantidad_compradores):
+                if comprador.get() == Comprador(i + 1).email:
+                    global comprador_flag 
+                    comprador_flag = i + 1
+                    break
             root.destroy()
 
     button_start = Button(frame, text='Comenzar', command=start)
-    button_start.grid(row=5, column=0, columnspan=2, pady=5)
+    button_start.grid(row=6, column=0, columnspan=2, pady=5)
 
     root.mainloop()
 
-    return producto
+    return [producto, comprador_flag]
