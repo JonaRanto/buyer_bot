@@ -210,6 +210,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 except Exception as e:
                     error(e)
         except Exception as e:
+            time.sleep(2)
             error(e)
 
 

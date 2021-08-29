@@ -20,9 +20,6 @@ respuesta_gui = gui()
 producto = respuesta_gui[0]
 numero_comprador = respuesta_gui[1]
 
-print('Si finalizó')
-sys.exit()
-
 # Programar compra
 if producto.programado:
     programar_compra(producto)
