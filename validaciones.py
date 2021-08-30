@@ -43,9 +43,9 @@ def validar_web(url: str):
             nombre_web = str(index.get('web_name'))
             break
     if validacion:
-        return list({validacion, nombre_web})
+        return list([validacion, nombre_web])
     else:
-        return list({validacion})
+        return list([validacion])
 
 def validar_talla(talla_buscada: str):
     '''

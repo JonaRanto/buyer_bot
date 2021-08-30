@@ -3,6 +3,7 @@
 Bot de compras online automaticas.
 '''
 # Importaciones
+from mensajes import mensaje
 import sys
 from buyer_bot_gui import gui
 from programacion import programar_compra
@@ -37,3 +38,5 @@ elif producto.nombre_web == 'adidas':
     # Conexion WebDriver
     wd = conectar_wd()
     webs.adidas(producto, numero_comprador, wd)
+else:
+    mensaje(2, 'Se ha recibido un nombre de web invalido: ' + str(producto.nombre_web))
