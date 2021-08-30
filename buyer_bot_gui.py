@@ -10,6 +10,7 @@ from tkinter import messagebox
 from validaciones import validar_formato_hora, validar_web
 from tkcalendar import Calendar
 import datetime as dt
+import sys
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
@@ -134,6 +135,10 @@ def gui():
     button_start = Button(frame, text='Comenzar', command=start)
     button_start.grid(row=6, column=0, columnspan=2, pady=5)
 
+    def cerrar_ventana():
+        sys.exit()
+
+    root.protocol('WM_DELETE_WINDOW', cerrar_ventana)
     root.mainloop()
 
     return [producto, comprador_flag]
