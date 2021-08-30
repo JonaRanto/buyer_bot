@@ -46,3 +46,11 @@ def validar_web(url: str):
         return list({validacion, nombre_web})
     else:
         return list({validacion})
+
+def validar_talla(talla_buscada: str):
+    '''
+    Recibe una talla y devuelve un bool con la validación.
+    '''
+    talla_re = re.compile(r'^(1\d|[5-9])(.[05]|)$')
+    validacion = bool(talla_re.search(talla_buscada))
+    return validacion

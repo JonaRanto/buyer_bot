@@ -7,7 +7,7 @@ Módulos de interfaz gráfica.
 from datos import Producto, Comprador
 from tkinter import *
 from tkinter import messagebox
-from validaciones import validar_formato_hora, validar_web
+from validaciones import validar_formato_hora, validar_web, validar_talla
 from tkcalendar import Calendar
 import datetime as dt
 import sys
@@ -38,6 +38,8 @@ def gui():
     descripcion_producto = StringVar()
     url_producto = StringVar()
     url_producto.set(r'https://moredrops.cl/Drops/Men/Footwear/Sneakers-Men/Zapatilla-Nike-x-Undercover-Dunk-High-1985-%27UBA%27/p/NIDD9401600')
+    talla_buscada = StringVar()
+    talla_unica = BooleanVar()
     compra_programada = BooleanVar()
     fecha_actual = dt.datetime.now()
     hora_evento = StringVar()
@@ -69,18 +71,38 @@ def gui():
     drop_comprador.grid(row=2, column=1, sticky=W, padx=10)
     comprador.set(compradores[0])
 
+    def buscar_talla_unica():
+        '''
+        Activa y desactiva la opción de buscar una talla unica
+        '''
+        if talla_unica.get():
+            label_talla_buscada.grid(row=4, column=0, sticky=E, pady=5, padx=10)
+            input_talla_buscada.grid(row=4, column=1, sticky=W, padx=10)
+        else:
+            label_talla_buscada.grid_forget()
+            input_talla_buscada.grid_forget()
+
+    chk_box_buscar_talla_unica = Checkbutton(
+        frame, text='Buscar talla unica', variable=talla_unica, command=buscar_talla_unica)
+    chk_box_buscar_talla_unica.grid(row=3, column=1, sticky=W, padx=10)
+
+    label_talla_buscada = Label(frame, text='Talla buscada: ')
+    label_talla_buscada.grid_forget()
+    input_talla_buscada = Entry(frame, width=4, textvariable=talla_buscada)
+    input_talla_buscada.grid_forget()
+
     def programar_compra():
         '''
         Activa y desactiva las opciones de compra programada.
         '''
         if compra_programada.get():
             label_programar_fecha.grid(
-                row=4, column=0, sticky=E, pady=5, padx=10)
-            input_programar_fecha.grid(row=4, column=1, padx=10)
+                row=6, column=0, sticky=E, pady=5, padx=10)
+            input_programar_fecha.grid(row=6, column=1, padx=10)
             input_programar_fecha['mindate'] = fecha_actual
             label_programar_hora.grid(
-                row=5, column=0, sticky=E, pady=5, padx=10)
-            input_programar_hora.grid(row=5, column=1, sticky=W, padx=10)
+                row=7, column=0, sticky=E, pady=5, padx=10)
+            input_programar_hora.grid(row=7, column=1, sticky=W, padx=10)
         else:
             label_programar_fecha.grid_forget()
             input_programar_fecha.grid_forget()
@@ -89,7 +111,7 @@ def gui():
 
     chk_box_compra_programada = Checkbutton(
         frame, text='Programar', variable=compra_programada, command=programar_compra)
-    chk_box_compra_programada.grid(row=3, column=1, sticky=W, padx=10)
+    chk_box_compra_programada.grid(row=5, column=1, sticky=W, padx=10)
 
     label_programar_fecha = Label(
         frame, text='Fecha programada: ')
@@ -104,23 +126,23 @@ def gui():
 
     def start():
         '''
-        Valida url y hora y en caso de pasar la validación, finaliza la interfaz gráfica.
+        Valida url, hora y talla, en caso de pasar la validación, finaliza la interfaz gráfica.
         '''
         validacion_web = validar_web(url_producto.get())
+        validacion_talla = validar_talla(talla_buscada.get())
         validado = False
         if not validacion_web[0]:
             messagebox.showerror('[ERROR]', 'La URL no es valida.')
-        elif compra_programada.get():
-            if not validar_formato_hora(hora_evento.get()):
-                messagebox.showerror(
-                    '[ERROR]', 'Formato de hora incorrecto. Ejemplo de formato: (08:30).')
-            else:
-                validado = True
+        elif talla_unica.get() and not validacion_talla:
+            messagebox.showerror('[ERROR]', 'Formato de la talla incorrecto. Ejemplo de formato: (11.5).')
+        elif compra_programada.get() and not validar_formato_hora(hora_evento.get()):
+            messagebox.showerror('[ERROR]', 'Formato de hora incorrecto. Ejemplo de formato: (08:30).')
         else:
             validado = True
         if validado:
             producto.url = url_producto.get()
             producto.nombre_web = validacion_web[1]
+            producto.talla_buscada = talla_buscada.get()
             producto.programado = compra_programada.get()
             producto.fecha_programada = input_programar_fecha.get_date()
             producto.hora_programada = hora_evento.get()
@@ -133,7 +155,7 @@ def gui():
             root.destroy()
 
     button_start = Button(frame, text='Comenzar', command=start)
-    button_start.grid(row=6, column=0, columnspan=2, pady=5)
+    button_start.grid(row=8, column=0, columnspan=2, pady=5)
 
     def cerrar_ventana():
         sys.exit()

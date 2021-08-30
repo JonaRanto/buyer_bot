@@ -91,11 +91,20 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
             for index in range(len(lista_tallas)):
                 if not 'disabled' in lista_tallas[index].get_attribute('class'):
                     tallas_disponibles.append(lista_tallas[index])
-            # Si encuentran tallas disponibles, se selecciona una al azar
-            if len(tallas_disponibles) <= 0:
+            # Si encuentran tallas disponibles, se busca una talla especifica o seselecciona una al azar
+            if len(tallas_disponibles) == 0:
                 error('No se ha encontrado ninguna talla disponible.')
             else:
-                talla_seleccionada = random.choice(tallas_disponibles)
+                if producto.talla_buscada == None:
+                    talla_seleccionada = random.choice(tallas_disponibles)
+                else:
+                    talla_encontrada = False
+                    for index in range(len(tallas_disponibles)):
+                        if tallas_disponibles[index].text.split(' ')[1] == producto.talla_buscada:
+                            talla_seleccionada = tallas_disponibles[index]
+                            talla_encontrada = True
+                    if not talla_encontrada:
+                        error('No se ha encontrado la talla buscada.')
                 mensaje(1, 'Se ha seleccionado la talla ' +
                         str(talla_seleccionada.text + '.'))
                 talla_seleccionada.click()
@@ -275,11 +284,20 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
             for index in range(len(lista_tallas)):
                 if not 'disabled' in lista_tallas[index].get_attribute('class'):
                     tallas_disponibles.append(lista_tallas[index])
-            # Si encuentran tallas disponibles, se selecciona una al azar
-            if len(tallas_disponibles) <= 0:
+            # Si encuentran tallas disponibles, se busca una talla especifica o seselecciona una al azar
+            if len(tallas_disponibles) == 0:
                 error('No se ha encontrado ninguna talla disponible.')
             else:
-                talla_seleccionada = random.choice(tallas_disponibles)
+                if producto.talla_buscada == None:
+                    talla_seleccionada = random.choice(tallas_disponibles)
+                else:
+                    talla_encontrada = False
+                    for index in range(len(tallas_disponibles)):
+                        if tallas_disponibles[index].text.split(' ')[1] == producto.talla_buscada:
+                            talla_seleccionada = tallas_disponibles[index]
+                            talla_encontrada = True
+                    if not talla_encontrada:
+                        error('No se ha encontrado la talla buscada.')
                 mensaje(1, 'Se ha seleccionado la talla ' +
                         str(talla_seleccionada.text + '.'))
                 talla_seleccionada.click()
