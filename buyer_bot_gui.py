@@ -23,8 +23,7 @@ __status__ = 'developer'
 # Variables
 webs_disponibles_file = os.getcwd() + '\\webs_disponibles.json'
 webs = []
-cantidad_compradores = Comprador().contar_compradores()
-compradores = []
+lista_cantidad_compradores = []
 global comprador_flag
 
 # Módulos
@@ -45,12 +44,13 @@ def gui():
     palabra_clave = StringVar()
     web_name = StringVar()
     url_producto = StringVar()
+    url_producto.set(r'https://moredrops.cl/Drops/Men/Footwear/Sneakers-Men/Zapatilla-Nike-Air-Max-90-NRG-Shimmer-Sail-Desert-Sand/p/NICZ1929200070')
     talla_unica = BooleanVar()
     talla_buscada = StringVar()
     compra_programada = BooleanVar()
     fecha_actual = dt.datetime.now()
     hora_evento = StringVar()
-    comprador = StringVar()
+    compradores = StringVar()
 
     root.title('Interfaz gráfica buyer_bot')
     root.resizable(False, False)
@@ -110,14 +110,14 @@ def gui():
     input_url_producto = Entry(frame, width=40, textvariable=url_producto)
     input_url_producto.grid(row=2, column=1, padx=10)
 
-    for i in range(cantidad_compradores):
-        compradores.append(Comprador(i + 1).email)
+    for i in range(Comprador().contar_compradores()):
+        lista_cantidad_compradores.append(i + 1)
 
-    label_comprador = Label(frame, text='Comprador: ')
+    label_comprador = Label(frame, text='Cantidad de compradores: ')
     label_comprador.grid(row=5, column=0, sticky=E, pady=5, padx=10)
-    drop_comprador = OptionMenu(frame, comprador, *compradores)
+    drop_comprador = OptionMenu(frame, compradores, *lista_cantidad_compradores)
     drop_comprador.grid(row=5, column=1, sticky=W, padx=10)
-    comprador.set(compradores[0])
+    compradores.set(lista_cantidad_compradores[0])
 
     def buscar_talla_unica():
         '''
@@ -201,11 +201,6 @@ def gui():
             producto.fecha_programada = input_programar_fecha.get_date()
             producto.hora_programada = hora_evento.get()
             producto.descripcion = descripcion_producto.get()
-            for i in range(cantidad_compradores):
-                if comprador.get() == Comprador(i + 1).email:
-                    global comprador_flag
-                    comprador_flag = i + 1
-                    break
             root.destroy()
 
     button_start = Button(frame, text='Comenzar', command=start)
@@ -217,4 +212,4 @@ def gui():
     root.protocol('WM_DELETE_WINDOW', cerrar_ventana)
     root.mainloop()
 
-    return [producto, comprador_flag]
+    return [producto, int(compradores.get())]

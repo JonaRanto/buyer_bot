@@ -36,7 +36,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     while True:
         # Ingresar a la URL y limpia la consola
-        if producto.busqueda_producto == None:
+        if producto.busqueda_producto == 'None':
             wd.get(producto.url)
             limpiar_consola(producto)
         else:
@@ -61,7 +61,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
 
         # Buscar URL de producto a través de una palabra
         try:
-            if producto.busqueda_producto != None:
+            if producto.busqueda_producto != 'None':
                 mensaje(1, 'Buscando producto...')
                 grilla_productos = wd.find_element_by_xpath('//ul[@class="product__listing product__grid"]')
                 lista_productos = grilla_productos.find_elements_by_class_name('name')
@@ -74,7 +74,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                         break
                 if producto_encontrado:
                     producto.url = str(wd.current_url)
-                    producto.busqueda_producto = None
+                    producto.busqueda_producto = 'None'
                 else:
                     error('Producto no encontrado.')
         except Exception as e:
@@ -121,7 +121,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
             if len(tallas_disponibles) == 0:
                 error('No se ha encontrado ninguna talla disponible.')
             else:
-                if producto.talla_buscada == None:
+                if producto.talla_buscada == 'None':
                     talla_seleccionada = random.choice(tallas_disponibles)
                 else:
                     talla_encontrada = False
@@ -256,7 +256,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     while True:
         # Ingresar a la URL y limpia la consola
-        if producto.busqueda_producto == None:
+        if producto.busqueda_producto == 'None':
             wd.get(producto.url)
             limpiar_consola(producto)
         else:
@@ -281,7 +281,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
 
         # Buscar URL de producto a través de una palabra
         try:
-            if producto.busqueda_producto != None:
+            if producto.busqueda_producto != 'None':
                 mensaje(1, 'Buscando producto...')
                 grilla_productos = wd.find_element_by_xpath('//ul[@class="product__listing product__grid"]')
                 lista_productos = grilla_productos.find_elements_by_class_name('name')
@@ -294,7 +294,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                         break
                 if producto_encontrado:
                     producto.url = str(wd.current_url)
-                    producto.busqueda_producto = None
+                    producto.busqueda_producto = 'None'
                 else:
                     error('Producto no encontrado.')
         except Exception as e:
@@ -341,7 +341,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
             if len(tallas_disponibles) == 0:
                 error('No se ha encontrado ninguna talla disponible.')
             else:
-                if producto.talla_buscada == None:
+                if producto.talla_buscada == 'None':
                     talla_seleccionada = random.choice(tallas_disponibles)
                 else:
                     talla_encontrada = False
@@ -570,7 +570,7 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
                     cantidad_carrito = wd.find_elements_by_xpath(
                         '//div[@data-auto-id="glass-cart-item-list"]/div/div/div/div/div/div/div/div[2]/div/button')
                     cantidad_carrito_flag = len(cantidad_carrito)
-                    # Verificar si hay mas de un producto en el carrito y elimina el mas antiguo
+                    # Verificar si hay mas de un producto en el carrito y elimina el más antiguo
                     if len(cantidad_carrito) > 1:
                         mensaje(1, 'Eliminando producto más antiguo...')
                         eliminar_producto = wd.find_element_by_xpath(

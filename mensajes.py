@@ -29,6 +29,8 @@ def mensaje(tipo: int, mensaje: str):
         print(colorama.Fore.YELLOW, ' [INFO] ' + mensaje + Style.RESET_ALL)
     elif tipo == 2:
         print(colorama.Fore.RED, ' [ERROR] ' + mensaje + Style.RESET_ALL)
+    elif tipo ==3:
+        print(colorama.Fore.CYAN, ' [IMPORTANTE] ' + mensaje + Style.RESET_ALL)
     else:
         print(colorama.Fore.WHITE, ' [-] ' + mensaje + Style.RESET_ALL)
 
