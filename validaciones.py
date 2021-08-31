@@ -47,6 +47,7 @@ def validar_web(url: str):
     else:
         return list([validacion])
 
+
 def validar_talla(talla_buscada: str):
     '''
     Recibe una talla y devuelve un bool con la validación.
