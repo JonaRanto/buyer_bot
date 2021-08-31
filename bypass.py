@@ -23,7 +23,7 @@ __status__ = 'developer'
 
 # Variables
 speetch_to_text_url = "https://speech-to-text-demo.ng.bluemix.net/"
-audioFile = "\\payload.mp3"
+audioFile = "\\payload" + str(os.getpid()) + ".mp3"
 
 # Módulos
 
@@ -82,6 +82,9 @@ def saltar_bypass(wd: WebDriver):
                 # Conversor de voz a texto
                 key = AudioToText(os.getcwd() + audioFile, wd)
                 mensaje(1, 'Recaptcha Key: %s' % key)
+
+                # Eliminar el archivo de payload luego de usarse
+                os.remove(os.getcwd() + audioFile)
 
                 # Vuelve a ubicarse en el frame del recaptcha
                 wd.switch_to.default_content()
