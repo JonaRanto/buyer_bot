@@ -36,8 +36,13 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     while True:
         # Ingresar a la URL y limpia la consola
-        wd.get(producto.url)
-        limpiar_consola(producto)
+        if producto.busqueda_producto == None:
+            wd.get(producto.url)
+            limpiar_consola(producto)
+        else:
+            producto.url = r'https://bold.cl/search/?text=' + producto.busqueda_producto
+            wd.get(producto.url)
+            limpiar_consola(producto)
 
         # Verificar si es está en una cola de queue-it.net
         while True:
@@ -53,6 +58,27 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 time.sleep(3)
             else:
                 break
+
+        # Buscar URL de producto a través de una palabra
+        try:
+            if producto.busqueda_producto != None:
+                mensaje(1, 'Buscando producto...')
+                grilla_productos = wd.find_element_by_xpath('//ul[@class="product__listing product__grid"]')
+                lista_productos = grilla_productos.find_elements_by_class_name('name')
+                producto_encontrado = False
+                for index in range(len(lista_productos)):
+                    if lista_productos[index].get_attribute('href').find(producto.palabra_clave) != -1:
+                        mensaje(1, 'Producto encontrado.')
+                        lista_productos[index].click()
+                        producto_encontrado = True
+                        break
+                if producto_encontrado:
+                    producto.url = str(wd.current_url)
+                    producto.busqueda_producto = None
+                else:
+                    error('Producto no encontrado.')
+        except Exception as e:
+            error(e)
 
         # Inicia sesion si no está ya iniciada
         try:
@@ -111,6 +137,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 # Intentar añadir al carrito
                 try:
                     mensaje(1, 'Añadiendo al carrito...')
+                    WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.ID, 'addToCartForm')))
                     formulario_agregar_carro = wd.find_element_by_id(
                         'addToCartForm')
                     if formulario_agregar_carro.text == 'FUERA DE STOCK':
@@ -229,8 +256,13 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     while True:
         # Ingresar a la URL y limpia la consola
-        wd.get(producto.url)
-        limpiar_consola(producto)
+        if producto.busqueda_producto == None:
+            wd.get(producto.url)
+            limpiar_consola(producto)
+        else:
+            producto.url = r'https://moredrops.cl/search/?text=' + producto.busqueda_producto
+            wd.get(producto.url)
+            limpiar_consola(producto)
 
         # Verificar si es está en una cola de queue-it.net
         while True:
@@ -246,6 +278,27 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 time.sleep(3)
             else:
                 break
+
+        # Buscar URL de producto a través de una palabra
+        try:
+            if producto.busqueda_producto != None:
+                mensaje(1, 'Buscando producto...')
+                grilla_productos = wd.find_element_by_xpath('//ul[@class="product__listing product__grid"]')
+                lista_productos = grilla_productos.find_elements_by_class_name('name')
+                producto_encontrado = False
+                for index in range(len(lista_productos)):
+                    if lista_productos[index].get_attribute('href').find(producto.palabra_clave) != -1:
+                        mensaje(1, 'Producto encontrado.')
+                        lista_productos[index].click()
+                        producto_encontrado = True
+                        break
+                if producto_encontrado:
+                    producto.url = str(wd.current_url)
+                    producto.busqueda_producto = None
+                else:
+                    error('Producto no encontrado.')
+        except Exception as e:
+            error(e)
 
         # Inicia sesion si no está ya iniciada
         try:
@@ -304,6 +357,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 # Intentar añadir al carrito
                 try:
                     mensaje(1, 'Añadiendo al carrito...')
+                    WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.ID, 'addToCartForm')))
                     formulario_agregar_carro = wd.find_element_by_id(
                         'addToCartForm')
                     if formulario_agregar_carro.text == 'FUERA DE STOCK':

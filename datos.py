@@ -24,12 +24,15 @@ config.read(configuracion_file)
 
 
 class Producto():
-    def __init__(self, url: str = None, nombre_web: str = None, programado: bool = False, fecha_programada: str = None,  hora_programada: str = None, descripcion: str = None):
+    def __init__(self, url: str = None, busqueda_producto: str = None, palabra_clave:str = None, nombre_web: str = None, talla_buscada: str = None, programado: bool = False, fecha_programada: str = None,  hora_programada: str = None, descripcion: str = None):
         '''
         Crea un objeto de tipo Producto.
         '''
         self.url = url
+        self.busqueda_producto = busqueda_producto
+        self.palabra_clave = palabra_clave
         self.nombre_web = nombre_web
+        self.talla_buscada = talla_buscada
         self.programado = programado
         self.fecha_programada = fecha_programada
         self.hora_programada = hora_programada
