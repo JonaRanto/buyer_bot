@@ -67,7 +67,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 lista_productos = grilla_productos.find_elements_by_class_name('name')
                 producto_encontrado = False
                 for index in range(len(lista_productos)):
-                    if lista_productos[index].get_attribute('href').find(producto.palabra_clave) != -1:
+                    if lista_productos[index].get_attribute('href').lower().find(producto.palabra_clave) != -1:
                         mensaje(1, 'Producto encontrado.')
                         lista_productos[index].click()
                         producto_encontrado = True
@@ -287,7 +287,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 lista_productos = grilla_productos.find_elements_by_class_name('name')
                 producto_encontrado = False
                 for index in range(len(lista_productos)):
-                    if lista_productos[index].get_attribute('href').find(producto.palabra_clave) != -1:
+                    if lista_productos[index].get_attribute('href').lower().find(producto.palabra_clave) != -1:
                         mensaje(1, 'Producto encontrado.')
                         lista_productos[index].click()
                         producto_encontrado = True
