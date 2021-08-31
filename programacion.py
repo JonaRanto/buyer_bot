@@ -18,7 +18,7 @@ __status__ = 'developer'
 # Módulos
 
 
-def programar_compra(producto: Producto):
+def programar_compra(producto: Producto, numero_comprador: int):
     '''
     Recibe un objeto de tipo Producto y espera en un bucle hasta llegar a la hora indicada.
     '''
@@ -30,7 +30,7 @@ def programar_compra(producto: Producto):
         lista_fecha[2], lista_fecha[1], lista_fecha[0], lista_hora[0], lista_hora[1]).strftime('%d-%m-%Y %H:%M')
     while True:
         if fecha_actual < fecha_programada:
-            limpiar_consola(producto)
+            limpiar_consola(producto, numero_comprador)
             mensaje(1, 'Esperando evento... (' + fecha_programada + ')')
             fecha_actual = dt.datetime.now().strftime('%d-%m-%Y %H:%M')
             time.sleep(3)

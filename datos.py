@@ -60,7 +60,6 @@ class Comprador():
                 break
         return index - 1
 
-
 class Tarjeta():
     def __init__(self):
         '''

@@ -5,7 +5,7 @@ Módulos de mensajes.
 
 # Importaciones
 from colorama.ansi import Style
-from datos import Producto
+from datos import Comprador, Producto
 import colorama
 import os
 
@@ -35,7 +35,7 @@ def mensaje(tipo: int, mensaje: str):
         print(colorama.Fore.WHITE, ' [-] ' + mensaje + Style.RESET_ALL)
 
 
-def limpiar_consola(producto: Producto):
+def limpiar_consola(producto: Producto, numero_comprador: int):
     '''
     Recibe un objeto de tipo Producto, limpia la consola e imprime un texto por defecto.
     '''
@@ -43,5 +43,6 @@ def limpiar_consola(producto: Producto):
     if os.name in ('nt', 'dos'):
         comando = 'cls'
     os.system(comando)
+    mensaje(0, 'Comprador: ' + Comprador(numero_comprador).email)
     mensaje(0, 'Descripción: ' + producto.descripcion)
     mensaje(0, 'URL: ' + producto.url + '\n')

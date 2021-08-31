@@ -19,7 +19,7 @@ def elegir_web(numero_comprador: int, url, busqueda_producto, palabra_clave, nom
 
     # Programar compra
     if producto.programado:
-        programar_compra(producto)
+        programar_compra(producto, numero_comprador)
 
     if producto.nombre_web == 'bold':
         # Conexion WebDriver

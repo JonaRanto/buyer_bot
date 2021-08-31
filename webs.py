@@ -38,16 +38,16 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
         # Ingresar a la URL y limpia la consola
         if producto.busqueda_producto == 'None':
             wd.get(producto.url)
-            limpiar_consola(producto)
+            limpiar_consola(producto, numero_comprador)
         else:
             producto.url = r'https://bold.cl/search/?text=' + producto.busqueda_producto
             wd.get(producto.url)
-            limpiar_consola(producto)
+            limpiar_consola(producto, numero_comprador)
 
         # Verificar si es está en una cola de queue-it.net
         while True:
             if validar_web(str(wd.current_url))[1] == 'yaneken':
-                limpiar_consola(producto)
+                limpiar_consola(producto, numero_comprador)
                 mensaje(1, 'Esperando en cola...')
                 # Buscar captcha
                 mensaje(1, 'Buscando captcha...')
@@ -258,16 +258,16 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
         # Ingresar a la URL y limpia la consola
         if producto.busqueda_producto == 'None':
             wd.get(producto.url)
-            limpiar_consola(producto)
+            limpiar_consola(producto, numero_comprador)
         else:
             producto.url = r'https://moredrops.cl/search/?text=' + producto.busqueda_producto
             wd.get(producto.url)
-            limpiar_consola(producto)
+            limpiar_consola(producto, numero_comprador)
 
         # Verificar si es está en una cola de queue-it.net
         while True:
             if validar_web(str(wd.current_url))[1] == 'yaneken':
-                limpiar_consola(producto)
+                limpiar_consola(producto, numero_comprador)
                 mensaje(1, 'Esperando en cola...')
                 # Buscar captcha
                 mensaje(1, 'Buscando captcha...')
@@ -476,7 +476,7 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
     while True:
         # Ingresar a la URL y limpia la consola
         wd.get(producto.url)
-        limpiar_consola(producto)
+        limpiar_consola(producto, numero_comprador)
 
         # Inicia sesion si no está ya iniciada
         try:
@@ -515,7 +515,7 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
         while True:
             mensaje(1, 'Verificando si se encuentra en una sala de espera...')
             if len(wd.find_elements_by_xpath('//h1[@data-auto-id="product-title"]')) == 0:
-                limpiar_consola(producto)
+                limpiar_consola(producto, numero_comprador)
                 mensaje(1, 'Esperando en cola...')
                 time.sleep(3)
             else:
