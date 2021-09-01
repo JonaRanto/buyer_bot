@@ -6,6 +6,9 @@ import webs
 import sys
 
 def elegir_web(numero_comprador: int, url, busqueda_producto, palabra_clave, nombre_web, talla_buscada, programado, fecha_programada,  hora_programada, descripcion):
+    '''
+    Recibe el numero del comprador los datos para crear un objeto de tipo Producto y ejecuta el código correspondiente a la web del producto.
+    '''
     producto = Producto()
     producto.url = url
     producto.busqueda_producto = busqueda_producto

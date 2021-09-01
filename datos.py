@@ -24,7 +24,7 @@ config.read(configuracion_file)
 
 
 class Producto():
-    def __init__(self, url: str = None, busqueda_producto: str = None, palabra_clave:str = None, nombre_web: str = None, talla_buscada: str = None, programado: bool = False, fecha_programada: str = None,  hora_programada: str = None, descripcion: str = None):
+    def __init__(self, url: str = None, busqueda_producto: str = None, palabra_clave: str = None, nombre_web: str = None, talla_buscada: str = None, programado: bool = False, fecha_programada: str = None,  hora_programada: str = None, descripcion: str = None):
         '''
         Crea un objeto de tipo Producto.
         '''
@@ -46,7 +46,7 @@ class Comprador():
         '''
         self.email = config.get('comprador-' + str(numero_comprador), 'email')
         self.pwd = config.get('comprador-' + str(numero_comprador), 'pass')
-    
+
     def contar_compradores(self):
         '''
         Devuelve un int con la cantidad de compradores en la configuración.
@@ -59,6 +59,7 @@ class Comprador():
             except:
                 break
         return index - 1
+
 
 class Tarjeta():
     def __init__(self):

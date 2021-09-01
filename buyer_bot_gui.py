@@ -207,6 +207,9 @@ def gui():
     button_start.grid(row=11, column=0, columnspan=2, pady=5)
 
     def cerrar_ventana():
+        '''
+        Cierra la aplicación.
+        '''
         sys.exit()
 
     root.protocol('WM_DELETE_WINDOW', cerrar_ventana)
