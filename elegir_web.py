@@ -1,3 +1,9 @@
+#!/usr/bin/python3
+'''
+Módulos de elegicción de web.
+'''
+
+# Importaciones
 from conexion import conectar_wd
 from programacion import programar_compra
 from mensajes import mensaje
@@ -5,9 +11,18 @@ from datos import Producto
 import webs
 import sys
 
+# Metadatos
+__author__ = 'Jonathan Navarro Vega'
+__version__ = '1.0.4'
+__email__ = 'jonathan@ranto.cl'
+__status__ = 'developer'
+
+# Módulos
+
+
 def elegir_web(numero_comprador: int, url, busqueda_producto, palabra_clave, nombre_web, talla_buscada, programado, fecha_programada,  hora_programada, descripcion):
     '''
-    Recibe el numero del comprador los datos para crear un objeto de tipo Producto y ejecuta el código correspondiente a la web del producto.
+    Recibe el número del comprador los datos para crear un objeto de tipo Producto y ejecuta el código correspondiente a la web del producto.
     '''
     producto = Producto()
     producto.url = url

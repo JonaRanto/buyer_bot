@@ -17,7 +17,7 @@ import urllib.request
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.0.0'
+__version__ = '1.1.1'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 

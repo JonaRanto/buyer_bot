@@ -11,7 +11,7 @@ import os
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.0.0'
+__version__ = '1.0.2'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 

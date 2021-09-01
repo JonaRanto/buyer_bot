@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.0.0'
+__version__ = '1.4.4'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
