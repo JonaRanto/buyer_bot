@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.4.4'
+__version__ = '1.4.5'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -586,8 +586,12 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
                             if cantidad_carrito_flag != len(cantidad_carrito):
                                 break
                     else:
-                        contador_carro = wd.find_element_by_xpath(
-                            '//span[@data-auto-id="cart-count"]')
+                        while True:
+                            contador_carro = wd.find_element_by_xpath(
+                                '//span[@data-auto-id="cart-count"]')
+                            time.sleep(0.5)
+                            if contador_carro.text != '':
+                                break
                         if int(contador_carro.text) > 1:
                             WebDriverWait(wd, tiempo_espera_elementos).until(
                                 ec.presence_of_element_located((By.XPATH, '//button[@data-auto-id="label"]')))

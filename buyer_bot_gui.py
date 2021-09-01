@@ -126,13 +126,16 @@ def gui():
         if talla_unica.get():
             label_talla_buscada.grid(row=7, column=0, sticky=E, pady=5, padx=10)
             input_talla_buscada.grid(row=7, column=1, sticky=W, padx=10)
+            label_no_disponible_adidas.grid(row=7, column=1, pady=5, padx=10)
         else:
             label_talla_buscada.grid_forget()
             input_talla_buscada.grid_forget()
+            label_no_disponible_adidas.grid_forget()
 
     chk_box_buscar_talla_unica = Checkbutton(
-        frame, text='Buscar talla unica', variable=talla_unica, command=buscar_talla_unica)
+        frame, text='Buscar talla única', variable=talla_unica, command=buscar_talla_unica)
     chk_box_buscar_talla_unica.grid(row=6, column=1, sticky=W, padx=10)
+    label_no_disponible_adidas = Label(frame, text='ⓘ No disponible en Adidas')
 
     label_talla_buscada = Label(frame, text='Talla buscada: ')
     label_talla_buscada.grid_forget()
