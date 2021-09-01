@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.4.5'
+__version__ = '1.4.6'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -569,6 +569,8 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
                 mensaje(1, 'Verificando carrito...')
                 # Verificar carrito de compras
                 while True:
+                    WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located(
+                    (By.XPATH, '//div[@data-auto-id="glass-cart-item-list"]/div/div/div/div/div/div/div/div[2]/div/button')))
                     cantidad_carrito = wd.find_elements_by_xpath(
                         '//div[@data-auto-id="glass-cart-item-list"]/div/div/div/div/div/div/div/div[2]/div/button')
                     cantidad_carrito_flag = len(cantidad_carrito)

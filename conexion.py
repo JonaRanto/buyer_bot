@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-Módulos de conexion.
+Módulos de conexión.
 '''
 
 # Importaciones
@@ -10,7 +10,7 @@ import os
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
