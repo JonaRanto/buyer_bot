@@ -60,14 +60,14 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 break
 
         # Buscar URL de producto a través de una palabra
-        try:
+        while True:
             if producto.busqueda_producto != 'None':
                 mensaje(1, 'Buscando producto...')
                 grilla_productos = wd.find_element_by_xpath('//ul[@class="product__listing product__grid"]')
                 lista_productos = grilla_productos.find_elements_by_class_name('name')
                 producto_encontrado = False
                 for index in range(len(lista_productos)):
-                    if lista_productos[index].get_attribute('href').lower().find(producto.palabra_clave) != -1:
+                    if lista_productos[index].get_attribute('href').lower().find(producto.palabra_clave.lower()) != -1:
                         mensaje(1, 'Producto encontrado.')
                         lista_productos[index].click()
                         producto_encontrado = True
@@ -75,10 +75,11 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 if producto_encontrado:
                     producto.url = str(wd.current_url)
                     producto.busqueda_producto = 'None'
+                    break
                 else:
                     error('Producto no encontrado.')
-        except Exception as e:
-            error(e)
+            else:
+                break
 
         # Inicia sesion si no está ya iniciada
         try:
@@ -280,14 +281,14 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 break
 
         # Buscar URL de producto a través de una palabra
-        try:
+        while True:
             if producto.busqueda_producto != 'None':
                 mensaje(1, 'Buscando producto...')
                 grilla_productos = wd.find_element_by_xpath('//ul[@class="product__listing product__grid"]')
                 lista_productos = grilla_productos.find_elements_by_class_name('name')
                 producto_encontrado = False
                 for index in range(len(lista_productos)):
-                    if lista_productos[index].get_attribute('href').lower().find(producto.palabra_clave) != -1:
+                    if lista_productos[index].get_attribute('href').lower().find(producto.palabra_clave.lower()) != -1:
                         mensaje(1, 'Producto encontrado.')
                         lista_productos[index].click()
                         producto_encontrado = True
@@ -295,10 +296,11 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 if producto_encontrado:
                     producto.url = str(wd.current_url)
                     producto.busqueda_producto = 'None'
+                    break
                 else:
                     error('Producto no encontrado.')
-        except Exception as e:
-            error(e)
+            else:
+                break
 
         # Inicia sesion si no está ya iniciada
         try:
