@@ -1,1 +1,4 @@
 /__pycache__
+/build
+/dist
+/buyer_bot.spec
