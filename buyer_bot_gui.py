@@ -16,7 +16,7 @@ import sys
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.4.2'
+__version__ = '1.4.3'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -44,7 +44,6 @@ def gui():
     palabra_clave = StringVar()
     web_name = StringVar()
     url_producto = StringVar()
-    url_producto.set(r'https://moredrops.cl/Drops/Men/Footwear/Sneakers-Men/Zapatilla-Nike-Air-Max-90-NRG-Shimmer-Sail-Desert-Sand/p/NICZ1929200070')
     talla_unica = BooleanVar()
     talla_buscada = StringVar()
     compra_programada = BooleanVar()
