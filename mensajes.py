@@ -11,7 +11,7 @@ import os
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -23,7 +23,7 @@ colorama.init()
 
 def mensaje(tipo: int, mensaje: str):
     '''
-    Recibe un tipo de mensaje 0:[-] | 1:[INFO] | 2:[ERROR] y el mensaje e imprime un mensaje formateado.
+    Recibe un tipo de mensaje 0:[-] | 1:[INFO] | 2:[ERROR] | 3:[IMPORTANTE] y el mensaje e imprime un mensaje formateado.
     '''
     if tipo == 1:
         print(colorama.Fore.YELLOW, ' [INFO] ' + mensaje + Style.RESET_ALL)
