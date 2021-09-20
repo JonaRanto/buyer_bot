@@ -30,7 +30,7 @@ def elegir_web(numero_comprador: int, url, busqueda_producto, palabra_clave, nom
     producto.palabra_clave = palabra_clave
     producto.nombre_web = nombre_web
     producto.talla_buscada = talla_buscada
-    producto.programado = bool(programado)
+    producto.programado = bool(eval(programado))
     producto.fecha_programada = fecha_programada
     producto.hora_programada = hora_programada
     producto.descripcion = descripcion
