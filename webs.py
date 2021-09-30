@@ -34,6 +34,8 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     Se ejecutan las instrucciones para la web de bold.
     '''
+    formulario_agregar_carro = None
+    texto_formulario_agregar_carro = None
     while True:
         # Ingresar a la URL y limpia la consola
         if producto.busqueda_producto == 'None':
@@ -52,7 +54,10 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 # Buscar captcha
                 mensaje(1, 'Buscando captcha...')
                 if len(wd.find_elements_by_id('divChallenge')) != 0:
-                    saltar_bypass(wd)
+                    try:
+                        saltar_bypass(wd)
+                    except:
+                        pass
                 else:
                     mensaje(1, 'Captcha no encontrado.')
                 time.sleep(3)
@@ -131,7 +136,11 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 error('No se ha encontrado ninguna talla disponible.')
             else:
                 if producto.talla_buscada == 'None':
-                    talla_seleccionada = random.choice(tallas_disponibles)
+                    if formulario_agregar_carro == None:
+                        talla_seleccionada = random.choice(tallas_disponibles)
+                    else:
+                        if texto_formulario_agregar_carro == 'FUERA DE STOCK':
+                            talla_seleccionada = random.choice(tallas_disponibles)
                 else:
                     talla_encontrada = False
                     for index in range(len(tallas_disponibles)):
@@ -143,12 +152,14 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 mensaje(1, 'Se ha seleccionado la talla ' +
                         str(talla_seleccionada.text + '.'))
                 talla_seleccionada.click()
+                time.sleep(1)
                 # Intentar añadir al carrito
                 try:
                     mensaje(1, 'Añadiendo al carrito...')
                     WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//button[@type="submit"]')))
                     formulario_agregar_carro = wd.find_element_by_xpath('//button[@type="submit"]')
-                    if formulario_agregar_carro.text == 'FUERA DE STOCK':
+                    texto_formulario_agregar_carro = formulario_agregar_carro.text
+                    if texto_formulario_agregar_carro == 'FUERA DE STOCK':
                         error('La talla está sin stock.')
                     else:
                         boton_agregar_carro = wd.find_element_by_xpath('//button[@type="submit"]')
@@ -263,6 +274,8 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     Se ejecutan las instrucciones para la web de moredrops.
     '''
+    formulario_agregar_carro = None
+    texto_formulario_agregar_carro = None
     while True:
         # Ingresar a la URL y limpia la consola
         if producto.busqueda_producto == 'None':
@@ -281,7 +294,10 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 # Buscar captcha
                 mensaje(1, 'Buscando captcha...')
                 if len(wd.find_elements_by_id('divChallenge')) != 0:
-                    saltar_bypass(wd)
+                    try:
+                        saltar_bypass(wd)
+                    except:
+                        pass
                 else:
                     mensaje(1, 'Captcha no encontrado.')
                 time.sleep(3)
@@ -352,7 +368,11 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 error('No se ha encontrado ninguna talla disponible.')
             else:
                 if producto.talla_buscada == 'None':
-                    talla_seleccionada = random.choice(tallas_disponibles)
+                    if formulario_agregar_carro == None:
+                        talla_seleccionada = random.choice(tallas_disponibles)
+                    else:
+                        if texto_formulario_agregar_carro == 'FUERA DE STOCK':
+                            talla_seleccionada = random.choice(tallas_disponibles)
                 else:
                     talla_encontrada = False
                     for index in range(len(tallas_disponibles)):
@@ -364,13 +384,15 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 mensaje(1, 'Se ha seleccionado la talla ' +
                         str(talla_seleccionada.text + '.'))
                 talla_seleccionada.click()
+                time.sleep(1)
                 # Intentar añadir al carrito
                 try:
                     mensaje(1, 'Añadiendo al carrito...')
                     WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.ID, 'addToCartForm')))
                     formulario_agregar_carro = wd.find_element_by_id(
                         'addToCartForm')
-                    if formulario_agregar_carro.text == 'FUERA DE STOCK':
+                    texto_formulario_agregar_carro = formulario_agregar_carro.text
+                    if texto_formulario_agregar_carro == 'FUERA DE STOCK':
                         error('La talla está sin stock.')
                     else:
                         boton_agregar_carro = wd.find_element_by_id(
@@ -667,4 +689,3 @@ def error(msg):
     '''
     mensaje(2, str(msg))
     mensaje(1, 'Recargando página...')
-    time.sleep(1)
