@@ -1,1 +1,2 @@
 pyinstaller buyer_bot.py --add-binary=alarm.wav;. --add-binary=chromedriver.exe;. --add-data=webs_disponibles.json;. --add-data=config.ini;. --hidden-import=babel.numbers --add-data=alertas.py;. --add-data=archivos.py;. --add-data=bypass.py;. --add-data=conexion.py;. --add-data=datos.py;. --add-data=elegir_web.py;. --add-data=mensajes.py;. --add-data=programacion.py;. --add-data=validaciones.py;. --add-data=webs.py;. --noconfirm -w
+robocopy python3.9\ dist\buyer_bot\ -E
