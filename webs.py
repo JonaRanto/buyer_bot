@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.5.1'
+__version__ = '1.5.2'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -51,15 +51,15 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
             if validar_web(str(wd.current_url))[1] == 'yaneken':
                 limpiar_consola(producto, numero_comprador)
                 mensaje(1, 'Esperando en cola...')
-                # Buscar captcha
-                mensaje(1, 'Buscando captcha...')
-                if len(wd.find_elements_by_id('divChallenge')) != 0:
-                    try:
-                        saltar_bypass(wd)
-                    except:
-                        pass
-                else:
-                    mensaje(1, 'Captcha no encontrado.')
+                # # Buscar captcha
+                # mensaje(1, 'Buscando captcha...')
+                # if len(wd.find_elements_by_id('divChallenge')) != 0:
+                #     try:
+                #         saltar_bypass(wd)
+                #     except:
+                #         pass
+                # else:
+                #     mensaje(1, 'Captcha no encontrado.')
                 time.sleep(3)
             else:
                 break
@@ -118,6 +118,49 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 wd.get(producto.url)
         except Exception as e:
             error(e)
+
+        # Verificar carrito de compras
+        try:
+            WebDriverWait(wd, 2).until(ec.presence_of_element_located((By.CLASS_NAME, 'count')))
+            contador_carro = wd.find_element_by_class_name('count')
+            if int(contador_carro.text) > 0:
+                contador_carro.click()
+            while True:
+                WebDriverWait(wd, tiempo_espera_elementos).until(
+                            ec.presence_of_element_located((By.CLASS_NAME, 'cx-item-list-row')))
+                cantidad_carrito = wd.find_elements_by_class_name('cx-item-list-row')
+                cantidad_carrito_flag = len(cantidad_carrito)
+                # Verificar si hay mas de un producto en el carrito y elimina todos menos el ultimo agregado
+                if len(cantidad_carrito) > 1:
+                    mensaje(
+                        1, 'Eliminando producto más antiguo...')
+                    eliminar_producto = wd.find_elements_by_xpath(
+                        '//cx-icon[@type="TRASH_ALT"]')
+                    eliminar_producto[0].click()
+                    # Esperar a que cambie la cantidad en el carrito
+                    while True:
+                        cantidad_carrito = wd.find_elements_by_class_name('cx-item-list-row')
+                        time.sleep(0.5)
+                        if cantidad_carrito_flag != len(cantidad_carrito):
+                            break
+                else:
+                    mensaje(
+                        1, 'Eliminando producto más antiguo...')
+                    eliminar_producto = wd.find_elements_by_xpath(
+                        '//cx-icon[@type="TRASH_ALT"]')
+                    eliminar_producto[0].click()
+                    # Esperar a que cambie la cantidad en el carrito
+                    while True:
+                        cantidad_carrito = wd.find_elements_by_class_name('cx-item-list-row')
+                        time.sleep(0.5)
+                        if cantidad_carrito_flag != len(cantidad_carrito):
+                            break
+                    mensaje(
+                        1, 'Carrito verificado correctamente!')
+                    wd.get(producto.url)
+                    break
+        except:
+            pass
 
         # Realizar la compra
         try:
@@ -291,15 +334,15 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
             if validar_web(str(wd.current_url))[1] == 'yaneken':
                 limpiar_consola(producto, numero_comprador)
                 mensaje(1, 'Esperando en cola...')
-                # Buscar captcha
-                mensaje(1, 'Buscando captcha...')
-                if len(wd.find_elements_by_id('divChallenge')) != 0:
-                    try:
-                        saltar_bypass(wd)
-                    except:
-                        pass
-                else:
-                    mensaje(1, 'Captcha no encontrado.')
+                # # Buscar captcha
+                # mensaje(1, 'Buscando captcha...')
+                # if len(wd.find_elements_by_id('divChallenge')) != 0:
+                #     try:
+                #         saltar_bypass(wd)
+                #     except:
+                #         pass
+                # else:
+                #     mensaje(1, 'Captcha no encontrado.')
                 time.sleep(3)
             else:
                 break

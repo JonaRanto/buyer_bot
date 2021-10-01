@@ -44,6 +44,7 @@ def gui():
     palabra_clave = StringVar()
     web_name = StringVar()
     url_producto = StringVar()
+    url_producto.set(r"https://bold.cl/Bold/Mujer/Calzado-Mujer/Zapatillas-Mujer/Zapatilla-Nike-Wmns-Dunk-High-'Lemon-Twist'/p/NIDD1869108")
     talla_unica = BooleanVar()
     talla_buscada = StringVar()
     compra_programada = BooleanVar()
