@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.5.2'
+__version__ = '1.5.3'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -34,9 +34,9 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     Se ejecutan las instrucciones para la web de bold.
     '''
-    formulario_agregar_carro = None
-    texto_formulario_agregar_carro = None
     while True:
+        formulario_agregar_carro = None
+        texto_formulario_agregar_carro = None
         # Ingresar a la URL y limpia la consola
         if producto.busqueda_producto == 'None':
             wd.get(producto.url)
@@ -207,13 +207,12 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                     else:
                         boton_agregar_carro = wd.find_element_by_xpath('//button[@type="submit"]')
                         boton_agregar_carro.click()
-                        WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//*[@class="cx-dialog-row"]/div[3]/div[2]/a[1]')))
+                        time.sleep(1)
                         producto_agregado = wd.find_element_by_xpath(
                             '//*[@class="cx-dialog-title modal-title"]')
                         # Verifica que el producto se haya añadido correctamente
                         if producto_agregado.text.split()[0] != 'Producto':
-                            error(
-                                'El producto no se añadió correctamente al carrito.')
+                            error('El producto no se añadió correctamente al carrito.')
                         else:
                             mensaje(
                                 1, 'El producto se ha añadido al carrito correctamente!')
@@ -309,7 +308,9 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 except Exception as e:
                     error(e)
         except Exception as e:
-            time.sleep(2)
+            import sys
+            input('n')
+            sys.exit()
             error(e)
 
 
