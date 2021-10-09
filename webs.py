@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.5.3'
+__version__ = '1.5.4'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -318,9 +318,9 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     Se ejecutan las instrucciones para la web de moredrops.
     '''
-    formulario_agregar_carro = None
-    texto_formulario_agregar_carro = None
     while True:
+        formulario_agregar_carro = None
+        texto_formulario_agregar_carro = None
         # Ingresar a la URL y limpia la consola
         if producto.busqueda_producto == 'None':
             wd.get(producto.url)
