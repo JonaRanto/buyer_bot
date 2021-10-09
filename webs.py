@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.5.4'
+__version__ = '1.5.5'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -308,9 +308,6 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 except Exception as e:
                     error(e)
         except Exception as e:
-            import sys
-            input('n')
-            sys.exit()
             error(e)
 
 
