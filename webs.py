@@ -19,7 +19,7 @@ import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
-__version__ = '1.5.5'
+__version__ = '1.5.6'
 __email__ = 'jonathan@ranto.cl'
 __status__ = 'developer'
 
@@ -548,7 +548,7 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
     '''
     while True:
         # Ingresar a la URL y limpia la consola
-        wd.get(producto.url)
+        wd.get('https://www.adidas.cl/')
         limpiar_consola(producto, numero_comprador)
 
         # Inicia sesion si no está ya iniciada
@@ -584,10 +584,14 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
         except Exception as e:
             error(e)
 
+        wd.get(producto.url)
+
         # Verificar si se está en una sala de espera
         while True:
             mensaje(1, 'Verificando si se encuentra en una sala de espera...')
-            if len(wd.find_elements_by_xpath('//h1[@data-auto-id="product-title"]')) == 0:
+            if len(wd.find_elements_by_xpath('//button[@data-auto-id="button-add-to-bag"]')) == 1:
+                break
+            elif len(wd.find_elements_by_xpath('//h1[@data-auto-id="product-title"]')) == 0:
                 limpiar_consola(producto, numero_comprador)
                 mensaje(1, 'Esperando en cola...')
                 time.sleep(3)
@@ -596,47 +600,65 @@ def adidas(producto: Producto, numero_comprador: int, wd: WebDriver):
 
         # Realizar la compra
         try:
-            mensaje(1, 'Buscando talla con más unidades...')
-            # Obtiene la grilla de tallas
-            WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located(
-                (By.XPATH, '//div[@data-auto-id="size-selector"]')))
-            grilla_tallas = wd.find_element_by_xpath(
-                '//div[@data-auto-id="size-selector"]')
-            lista_tallas = grilla_tallas.find_elements_by_tag_name('span')
-            talla_mas_unidades = 0
-            selector_talla_flag = 0
-            selector_talla = wd.find_element_by_xpath(
-                '//div[@data-auto-id="pdp"]/div[2]/div[2]/section/div[1]')
-            # Recorre la grilla buscando la talla con mas unidades disponibles y la selecciona
-            for i in range(len(lista_tallas)):
-                lista_tallas[i].click()
-                if (selector_talla.text.split(' ')[-1] == 'almacenes'):
-                    if (int(selector_talla.text.split(' ')[-4]) >= talla_mas_unidades):
-                        talla_mas_unidades = int(
-                            selector_talla.text.split(' ')[-4])
-                        selector_talla_flag = i
-                elif (selector_talla.text.split(' ')[-1] == 'unidades'):
-                    if (10 >= talla_mas_unidades):
-                        talla_mas_unidades = 10
-                        selector_talla_flag = i
-                else:
-                    if (20 >= talla_mas_unidades):
-                        talla_mas_unidades = 20
-                        selector_talla_flag = i
-            lista_tallas[selector_talla_flag].click()
-            mensaje(1, 'Se ha seleccionado la talla ' +
-                    lista_tallas[selector_talla_flag].text + '.')
+            if len(wd.find_elements_by_xpath('//button[@data-auto-id="button-add-to-bag"]')) == 1:
+                mensaje(1, 'Seleccionando una talla...')
+                # Obtiene la grilla de tallas
+                seleccionar_talla = wd.find_element_by_xpath('//div[@data-auto-id="select-size"]')
+                wd.execute_script("arguments[0].scrollIntoView();", seleccionar_talla)
+                seleccionar_talla.click()
+                lista_tallas = wd.find_elements_by_xpath(
+                    '//li[@data-auto-id="select-size-option"]')
+                talla_seleccionada = random.choice(lista_tallas)
+                mi_talla_seleccionada = talla_seleccionada.text
+                talla_seleccionada.click()
+                mensaje(1, 'Se ha seleccionado la talla ' + mi_talla_seleccionada + '.')
+            else:
+                mensaje(1, 'Buscando talla con más unidades...')
+                # Obtiene la grilla de tallas
+                WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located(
+                    (By.XPATH, '//div[@data-auto-id="size-selector"]')))
+                grilla_tallas = wd.find_element_by_xpath(
+                    '//div[@data-auto-id="size-selector"]')
+                lista_tallas = grilla_tallas.find_elements_by_tag_name('span')
+                talla_mas_unidades = 0
+                selector_talla_flag = 0
+                selector_talla = wd.find_element_by_xpath(
+                    '//div[@data-auto-id="pdp"]/div[2]/div[2]/section/div[1]')
+                # Recorre la grilla buscando la talla con mas unidades disponibles y la selecciona
+                for i in range(len(lista_tallas)):
+                    lista_tallas[i].click()
+                    if (selector_talla.text.split(' ')[-1] == 'almacenes'):
+                        if (int(selector_talla.text.split(' ')[-4]) >= talla_mas_unidades):
+                            talla_mas_unidades = int(
+                                selector_talla.text.split(' ')[-4])
+                            selector_talla_flag = i
+                    elif (selector_talla.text.split(' ')[-1] == 'unidades'):
+                        if (10 >= talla_mas_unidades):
+                            talla_mas_unidades = 10
+                            selector_talla_flag = i
+                    else:
+                        if (20 >= talla_mas_unidades):
+                            talla_mas_unidades = 20
+                            selector_talla_flag = i
+                lista_tallas[selector_talla_flag].click()
+                mensaje(1, 'Se ha seleccionado la talla ' +
+                        lista_tallas[selector_talla_flag].text + '.')
             # Intentar añadir al carrito
             try:
-                mensaje(1, 'Añadiendo al carrito...')
-                boton_agregar_carro = wd.find_element_by_xpath(
-                    '//button[@data-auto-id="add-to-bag"]')
-                boton_agregar_carro.click()
-                WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located(
-                    (By.XPATH, '//a[@data-auto-id="view-bag-desktop"]')))
-                boton_ir_carrito = wd.find_element_by_xpath(
-                    '//a[@data-auto-id="view-bag-desktop"]')
-                boton_ir_carrito.click()
+                if len(wd.find_elements_by_xpath('//button[@data-auto-id="button-add-to-bag"]')) == 1:
+                    boton_ir_carrito = wd.find_element_by_xpath('//button[@data-auto-id="button-add-to-bag"]')
+                    boton_ir_carrito.click()
+                    time.sleep(2)
+                else:
+                    mensaje(1, 'Añadiendo al carrito...')
+                    boton_agregar_carro = wd.find_element_by_xpath(
+                        '//button[@data-auto-id="add-to-bag"]')
+                    boton_agregar_carro.click()
+                    WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located(
+                        (By.XPATH, '//a[@data-auto-id="view-bag-desktop"]')))
+                    boton_ir_carrito = wd.find_element_by_xpath(
+                        '//a[@data-auto-id="view-bag-desktop"]')
+                    boton_ir_carrito.click()
                 mensaje(1, 'Verificando carrito...')
                 # Verificar carrito de compras
                 while True:
