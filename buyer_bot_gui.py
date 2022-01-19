@@ -98,7 +98,7 @@ def gui():
 
     for i in cargar_json(webs_disponibles_file):
         if i.get('web_name') != 'yaneken' and i.get('web_name') != 'adidas':
-            webs.append(str(i.get('web_name')))
+            webs.append(str(i.get('web_hostname')))
 
     label_web = Label(frame, text='Web: ')
     drop_web = OptionMenu(frame, web_name, *webs)
