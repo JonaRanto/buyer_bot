@@ -39,15 +39,15 @@ def elegir_web(numero_comprador: int, url, busqueda_producto, palabra_clave, nom
     if producto.programado:
         programar_compra(producto, numero_comprador)
 
-    if producto.nombre_web == 'bold':
+    if producto.nombre_web == 'bold.cl' or producto.nombre_web == 'www.bold.cl' or producto.nombre_web == 'https://www.bold.cl':
         # Conexion WebDriver
         wd = conectar_wd()
         webs.bold(producto, numero_comprador, wd)
-    elif producto.nombre_web == 'moredrops':
+    elif producto.nombre_web == 'moredrops.cl' or producto.nombre_web == 'www.moredrops.cl':
         # Conexion WebDriver
         wd = conectar_wd()
         webs.moredrops(producto, numero_comprador, wd)
-    elif producto.nombre_web == 'adidas':
+    elif producto.nombre_web == 'www.adidas.cl':
         # Conexion WebDriver
         wd = conectar_wd()
         webs.adidas(producto, numero_comprador, wd)

@@ -9,6 +9,7 @@ import requests
 from buyer_bot_gui import gui
 import subprocess
 from configparser import ConfigParser
+import time
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
