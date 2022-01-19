@@ -3,8 +3,12 @@
 Bot de compras online automaticas.
 '''
 # Importaciones
+from os import getcwd
+import pathlib
+import requests
 from buyer_bot_gui import gui
 import subprocess
+from configparser import ConfigParser
 
 # Metadatos
 __author__ = 'Jonathan Navarro Vega'
@@ -16,6 +20,27 @@ __status__ = 'developer'
 respuesta_gui = gui()
 producto = respuesta_gui[0]
 numero_compradores = respuesta_gui[1]
+
+# def verificar_version():
+#     config_auto_update_file = getcwd() + r'/config-auto-update.ini'
+#     config = ConfigParser(interpolation=None)
+#     config.read(config_auto_update_file)
+#     url_last_readme = r'https://github.com/JonaRanto/' + config.get('File', 'id') + r'/raw/main/README.md'
+#     print('Verificando versión')
+#     page = requests.get(url_last_readme)
+#     last_version = page.text.split('\n')[1].split('=')[1]
+#     if not pathlib(getcwd() + r'/README.md').is_file():
+#         resp = False
+#     else:
+#         my_readme = open('README.md', 'r')
+#         my_version = my_readme.read().split('\n')[1].split('=')[1]
+#         my_readme.close()
+#         resp = False
+#         if my_version == last_version: resp = True
+#     return resp
+
+# if not verificar_version():
+#     subprocess.Popen(['python', 'autoupdate.py'])
 
 # Ejecutar subprocesos
 for i in range(numero_compradores):

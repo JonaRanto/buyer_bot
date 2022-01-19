@@ -42,7 +42,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
             wd.get(producto.url)
             limpiar_consola(producto, numero_comprador)
         else:
-            producto.url = r'https://bold.cl/search/' + producto.busqueda_producto
+            producto.url = r'https://www.bold.cl/search/' + producto.busqueda_producto
             wd.get(producto.url)
             limpiar_consola(producto, numero_comprador)
 
@@ -100,7 +100,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                 mensaje(1, 'La sesión ya está iniciada.')
             else:
                 mensaje(1, 'Sesión no iniciada. Iniciando sesión...')
-                wd.get('https://bold.cl/login')
+                wd.get('https://www.bold.cl/login')
                 WebDriverWait(wd, tiempo_espera_elementos).until(ec.presence_of_element_located((By.XPATH, '//input[@formcontrolname="userId"]')))
                 user_email = wd.find_element_by_xpath('//input[@formcontrolname="userId"]')
                 user_email.send_keys(Comprador(numero_comprador).email)
@@ -110,7 +110,7 @@ def bold(producto: Producto, numero_comprador: int, wd: WebDriver):
                     '//button[@data-test-login="login_button"]')
                 boton_login.click()
                 while True:
-                    if wd.current_url == 'https://bold.cl/':
+                    if wd.current_url == 'https://www.bold.cl/':
                         break
                     else:
                         time.sleep(0.5)
@@ -323,7 +323,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
             wd.get(producto.url)
             limpiar_consola(producto, numero_comprador)
         else:
-            producto.url = r'https://moredrops.cl/search/?text=' + producto.busqueda_producto
+            producto.url = r'https://www.moredrops.cl/search/?text=' + producto.busqueda_producto
             wd.get(producto.url)
             limpiar_consola(producto, numero_comprador)
 
@@ -380,7 +380,7 @@ def moredrops(producto: Producto, numero_comprador: int, wd: WebDriver):
                 mensaje(1, 'La sesión ya está iniciada.')
             else:
                 mensaje(1, 'Sesión no iniciada. Iniciando sesión...')
-                wd.get('https://moredrops.cl/login')
+                wd.get('https://www.moredrops.cl/login')
                 user_email = wd.find_element_by_id('j_username')
                 user_email.send_keys(Comprador(numero_comprador).email)
                 user_pass = wd.find_element_by_id('j_password')

@@ -4,8 +4,20 @@
         "web_hostname": "bold.cl"
     },
     {
+        "web_name": "bold",
+        "web_hostname": "www.bold.cl"
+    },
+    {
+        "web_name": "bold",
+        "web_hostname": "https://www.bold.cl"
+    },
+    {
         "web_name": "moredrops",
         "web_hostname": "moredrops.cl"
+    },
+    {
+        "web_name": "moredrops",
+        "web_hostname": "www.moredrops.cl"
     },
     {
         "web_name": "yaneken",

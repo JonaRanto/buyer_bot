@@ -1,2 +1,2 @@
 # buyer_bot
-version=1.0
+version=1.6
