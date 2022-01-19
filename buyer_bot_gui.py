@@ -191,7 +191,7 @@ def gui():
             validado = True
         if validado:
             if buscar_producto.get():
-                producto.busqueda_producto = busqueda_producto.get()
+                producto.busqueda_producto = busqueda_producto.get().replace("/", " ")
                 producto.palabra_clave = palabra_clave.get()
                 producto.nombre_web = web_name.get()
             else:
